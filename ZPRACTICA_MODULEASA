@@ -1,0 +1,75 @@
+*&---------------------------------------------------------------------*
+*& Include ZPRACTICA_MODULE_TOP                     - Modulpool        ZPRACTICA_MODULEASA
+*&---------------------------------------------------------------------*
+PROGRAM ZPRACTICA_MODULEASA.
+
+DATA: P_CARRID TYPE SFLIGHT-CARRID,
+      P_CONNID TYPE SFLIGHT-CONNID,
+      WA_SPFLI TYPE SPFLI.
+
+--------------------------------------------------------------------------
+ZPRACTICA_MODULEASA_STATUS_O01
+
+*----------------------------------------------------------------------*
+***INCLUDE ZPRACTICA_MODULEASA_STATUS_O01.
+*----------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*& Module STATUS_1000 OUTPUT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+MODULE status_1000 OUTPUT.
+ SET PF-STATUS 'STATUS_INICIAL'.
+ SET TITLEBAR 'Pantalla de inicio'.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*& Module STATUS_2000 OUTPUT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+MODULE status_2000 OUTPUT.
+ SET PF-STATUS 'PANTALLA_2'.
+ SET TITLEBAR 'PANTALLA 2'.
+ENDMODULE.
+
+--------------------------------------------------------------------------------
+
+ZPRACTICA_MODULEASA_USER_COI01
+
+*----------------------------------------------------------------------*
+***INCLUDE ZPRACTICA_MODULEASA_USER_COI01.
+*----------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_1000  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_1000 INPUT.
+CASE sy-ucomm.
+  WHEN 'DISP'.
+    SELECT SINGLE * FROM SPFLI INTO WA_SPFLI WHERE CARRID = P_CARRID AND CONNID = P_CONNID.
+      CALL SCREEN 2000.
+    WHEN 'BACK'.
+    RETURN.
+ENDCASE.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_2000  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_2000 INPUT.
+
+CASE sy-ucomm.
+  WHEN 'BACK'.
+    RETURN.
+  WHEN 'EXIT'.
+    LEAVE SCREEN.
+  WHEN 'CANC'.
+    LEAVE PROGRAM.
+  WHEN OTHERS.
+    RETURN.
+ ENDCASE.
+
+
+ENDMODULE.
